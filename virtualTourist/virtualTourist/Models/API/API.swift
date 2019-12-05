@@ -18,7 +18,7 @@ class API {
     
       static func getPhotosUrl ( with coordinate: CLLocationCoordinate2D , pageNum: Int , completion: @escaping ([URL]? , Error? ) -> () ) {
         
-        let methodeParametrs = [Constant.flickerParametersKeys.Method : "method" , Constant.flickerParametersKeys.APIKey : Constant.flickrParameterValues.APIKey , Constant.flickerParametersKeys.BoundingBox : BBoXString(for: coordinate) , Constant.flickerParametersKeys.SafeSearch : Constant.flickrParameterValues.UseSafeSearch , Constant.flickerParametersKeys.Extras : Constant.flickrParameterValues.MediumIRL , Constant.flickerParametersKeys.Format : Constant.flickrParameterValues.ResponseFormat , Constant.flickerParametersKeys.NoJSONCallback : Constant.flickrParameterValues.DisableJSONCall , Constant.flickerParametersKeys.Page : pageNum , Constant.flickerParametersKeys.PerPage : 1  ] as [String:Any]
+        let methodeParametrs = [Constant.flickerParametersKeys.Method : Constant.flickrParameterValues.SerchMethod , Constant.flickerParametersKeys.APIKey : Constant.flickrParameterValues.APIKey , Constant.flickerParametersKeys.BoundingBox : BBoXString(for: coordinate) , Constant.flickerParametersKeys.SafeSearch : Constant.flickrParameterValues.UseSafeSearch , Constant.flickerParametersKeys.Extras : Constant.flickrParameterValues.MediumIRL , Constant.flickerParametersKeys.Format : Constant.flickrParameterValues.ResponseFormat , Constant.flickerParametersKeys.NoJSONCallback : Constant.flickrParameterValues.DisableJSONCall , Constant.flickerParametersKeys.Page : pageNum , Constant.flickerParametersKeys.PerPage : 1  ] as [String:Any]
         
         
         let request = URLRequest(url: getURL(from: methodeParametrs))
@@ -41,8 +41,9 @@ class API {
                 return }
             
             
-            let jsonObject = try! JSONSerialization.jsonObject(with: data, options: []) as! [String:Any]
-            let stat = try! jsonObject["stat"] as?  String
+            guard let result = try! JSONSerialization.jsonObject(with: data, options: []) as? [String:Any] else { return }
+            
+            guard let stat = try! result["stat"] as? String else { return }
             
             
             guard  stat == "ok" else {
@@ -51,8 +52,10 @@ class API {
             }
             
             
-            guard let photosDict = jsonObject["photos"] as? [String:Any] else { return }
-            guard let photosArray = photosDict["photo"] as? [String:Any] else { return }
+            guard let photoDict = result["photos"] as? [String:Any] else {
+                return }
+            
+            guard let photosArray = photoDict["photo"] as? [[String:Any]] else { return }
             
             /*let photosURLs = photosArray.compactMap {
                 photosDict -> URL? in
@@ -66,13 +69,11 @@ class API {
             var photoURL = [URL]()
             for photoDict in photosArray {
             
-                guard let urlString = photosDict["url_m"] as? String else { return  }
+                guard let urlString = photoDict["url_m"] as? String else { return  }
                 let url = URL(string: urlString)
                 photoURL.append(url!)
             }
-            
-            
-            
+        
            completion( photoURL , nil )
         }
         

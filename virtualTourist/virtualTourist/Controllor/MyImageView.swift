@@ -29,6 +29,7 @@ class myImageView :UIImageView {
             
             if let image = photo.getImage() {
              stopAnimating()
+                
             self.image = image
             return
             }
@@ -61,12 +62,11 @@ class myImageView :UIImageView {
             
             DispatchQueue.main.async {
                 self.image = downloadImage
+                print("sucess image ")
                 try? self.photo.managedObjectContext?.save()
                 self.stopAnimating()
                 
             }
-            
-            
         
     }
         
@@ -75,7 +75,4 @@ class myImageView :UIImageView {
 
 
 }
-
-
-
 }
