@@ -11,9 +11,9 @@ import CoreData
 
 class DataControllor {
     
-    static let sharedInstanse = DataControllor()
+    static let shared = DataControllor()
     
-    let persistentContainer = NSPersistentContainer(name: "virtualTourist")
+    let persistentContainer = NSPersistentContainer(name: "VitualTourist")
     
     var viewContext : NSManagedObjectContext {
         return persistentContainer.viewContext
