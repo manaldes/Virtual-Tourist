@@ -23,6 +23,7 @@ It was built using Xcode Version Version 10.3 along with Swift 5.
 ` git clone https://github.com/manaldes/Virtual-Tourist.git `
 
 * Install dependences (CocoaPods needed)
+
 ` pod install `
 
 * Insert flicker API key & secret inside -> (Virtual\ Tourist/API/FlickrAPI.swift) left my key & secret for ease of building
