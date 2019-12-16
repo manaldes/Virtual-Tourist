@@ -43,7 +43,7 @@ struct flickrParameterValues {
     }
 }`
 
-* Open Virtual Tourist.xcworkspace
+* Open project.xcworkspace
 
 * Build app for your device or simulator
 
